@@ -135,7 +135,7 @@ end
 local function got(url, Method, Body) -- Basic version of https://www.npmjs.com/package/got using synapse's request API for google websites
     Method = Method or "GET"
 
-    local res = request({
+    local res = syn and syn.request or request({
         Url = url,
         Method = Method,
         Headers = {
@@ -146,7 +146,7 @@ local function got(url, Method, Body) -- Basic version of https://www.npmjs.com/
 
     if res.Body:match('https://consent.google.com/s') then
         googleConsent(res.Body)
-        res = request({
+        res = syn and syn.request or request({
             Url = url,
             Method = "GET",
             Headers = {
