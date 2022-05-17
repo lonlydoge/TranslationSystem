@@ -6,6 +6,16 @@ local executeURL = "https://translate.google.com/_/TranslateWebserverUi/data/bat
 
 local System = {}
 
+if not request then
+    if (syn) then
+        request = syn.request
+    end
+    
+    if http_request then
+        request = http_request 
+    end
+end
+
 local languages = {
     auto = "Automatic",
     af = "Afrikaans",
@@ -135,7 +145,7 @@ end
 local function got(url, Method, Body) -- Basic version of https://www.npmjs.com/package/got using synapse's request API for google websites
     Method = Method or "GET"
 
-    local res = (syn and syn.request) or request({
+    local res = request({
         Url = url,
         Method = Method,
         Headers = {
@@ -146,7 +156,7 @@ local function got(url, Method, Body) -- Basic version of https://www.npmjs.com/
 
     if res.Body:match('https://consent.google.com/s') then
         googleConsent(res.Body)
-        res = (syn and syn.request) or request({
+        res = request({
             Url = url,
             Method = "GET",
             Headers = {
